@@ -1,0 +1,2 @@
+# Bapak-Mangde
+Forecasting saham
