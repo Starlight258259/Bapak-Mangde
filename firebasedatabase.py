@@ -33,13 +33,23 @@ def logout():
 
 # === Fungsi-fungsi Firebase ===
 def register_user(username, password):
-    """Menambahkan pengguna baru ke dalam Firestore."""
+    """Menambahkan pengguna baru ke dalam Firestore, dengan pengecekan username terlebih dahulu."""
     try:
+        # Mengecek apakah username sudah ada di dalam database
+        users_ref = db.collection('users')
+        query = users_ref.where('username', '==', username).stream()
+        
+        # Jika username sudah ada, maka return False
+        if any(query):
+            return False  # Username sudah digunakan
+
+        # Jika username belum ada, lanjutkan proses pendaftaran
         db.collection('users').add({
             'username': username,
             'password': password
         })
-        return True
+        return True  # Pendaftaran berhasil
+
     except Exception as e:
         print(f"Error registering user: {e}")
         return False
